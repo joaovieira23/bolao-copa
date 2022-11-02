@@ -4,6 +4,7 @@ import logoImg from '../assets/logo.svg';
 import usersAvatarExampleImg from '../assets/users-avatar-example.png';
 import iconCheckImg from '../assets/icon-check.svg';
 import { FormEvent, useState } from "react";
+import { api } from "../lib/axios";
 
 interface HomeProps {
   poolCount: number;
@@ -25,7 +26,7 @@ export default function Home(props: HomeProps) {
           <Image src={usersAvatarExampleImg} alt="" />
 
           <strong className="text-gray-100 text-xl">
-            <span className="text-ignite-500">+12.623</span> pessoas já estão usando
+            <span className="text-ignite-500">+{props.userCount}</span> pessoas já estão usando
           </strong>
         </div>
 
@@ -52,7 +53,7 @@ export default function Home(props: HomeProps) {
           <div className="flex items-center gap-6">
             <Image src={iconCheckImg} alt="" />
             <div className="flex flex-col">
-              <span className="font-bold text-2xl">+2.623</span>
+              <span className="font-bold text-2xl">+{props.poolCount}</span>
               <span>Bolões criados</span>
             </div>
           </div>
@@ -76,4 +77,25 @@ export default function Home(props: HomeProps) {
       />
     </div>
   )
+}
+
+
+export const getServerSideProps = async () => {
+  const [
+    poolCountResponse,
+    guessCountResponse,
+    userCountResponse
+  ] = await Promise.all([
+    api.get('pools/count'),
+    api.get('guesses/count'),
+    api.get('users/count'),
+  ]);
+
+  return {
+    props: {
+      poolCount: poolCountResponse.data.count,
+      guessCount: guessCountResponse.data.count,
+      userCount: userCountResponse.data.count,
+    }
+  }
 }
