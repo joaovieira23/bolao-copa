@@ -1,7 +1,6 @@
-import { Heading, VStack, Text } from "native-base";
+import { Heading, VStack } from "native-base";
 import { Header } from '../components/Header';
 
-import Logo from '../assets/logo.svg';
 import { Input } from "../components/Input";
 import { Button } from "../components/Button";
 
